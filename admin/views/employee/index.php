@@ -72,7 +72,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     },
                     'update'=>function($url,$model,$key){
                         return "<a href='".$url."' class='btn btn-info'>update</a>";
-    
+                        //return Html::a('update',['update','id'=>$model->id,'tenant'=>$model->tenant_id],['class'=>'btn btn-info' ]);
                     },  
                     'delete' => function($url,$model,$key){
                         return "<a href='".$url."'  data-method='post' data-confirm='". Yii::t('kvgrid', 'Are you sure to delete this 1{key}?',['item' => $key])."' class='btn btn-info'>delete</a>";
@@ -82,7 +82,6 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
         ],
         'headerContainer' => ['style' => 'top:50px', 'class' => 'kv-table-header'], // offset from top
-        'floatHeader' => true, // table header floats when you scroll
         'floatPageSummary' => true, // table page summary floats when you scroll
         'floatFooter' => false, // disable floating of table footer
         // parameters from the demo form
@@ -99,7 +98,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'toolbar' =>  [
             [
                 'content' =>
-                    Html::a('Add New', ['create'], ['class' => 'btn btn-success'])
+                    Html::a('Add New', ['create','tenant'=>Yii::$app->request->get('id')], ['class' => 'btn btn-success'])
                     .Html::a('<i class="fas fa-redo"></i>', ['grid-demo'], [
                         'class' => 'btn btn-outline-secondary',
                         'title'=>Yii::t('app', 'Reset Grid'),

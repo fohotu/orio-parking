@@ -12,14 +12,17 @@ use yii\widgets\ActiveForm;
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($model, 'created_at')->textInput() ?>
+    <?= $form->field($model, 'name')->textInput() ?>
 
-    <?= $form->field($model, 'updated_at')->textInput() ?>
+    <?= $form->field($model, 'lastname')->textInput() ?>
 
-    <?= $form->field($model, 'created_by')->textInput() ?>
+    <?= $form->field($model, 'patronymic')->textInput() ?>
 
-    <?= $form->field($model, 'deleted_at')->textInput() ?>
-    <?= $form->field($model, 'tenant_id')->textInput() ?>
+    <?= $form->field($model, 'phone_number')->textInput() ?>
+    <?= $form->field($model, 'car_number')->textInput() ?>
+    <?= $form->field($model, 'car_description')->textInput() ?>
+    <?= $form->field($model, 'pass_from')->textInput() ?>
+    <?= $form->field($model, 'pass_to')->textInput() ?>
 
     <div class="form-group">
         <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>

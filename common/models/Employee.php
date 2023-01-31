@@ -38,7 +38,22 @@ class Employee extends \yii\db\ActiveRecord
 
     public function getProfile()
     {
-        return $this->hasOne(Profile::class,['user_id'=>'id']);
+        return $this->hasOne(Profile::class,['user_id'=>'id'])
+            ->where(['user_type'=>'employee']);
+    }
+
+    public function getCar()
+    {
+        return $this->hasMany(Car::class, ['id' => 'car_id'])
+            ->viaTable('user_car', ['user_id' => 'id'],function($query){
+                $query->andWhere(['user_type'=>'employee']);
+            });
+    }
+
+    public function getUserParking()
+    {
+        return $this->hasOne(UserParking::class, ['user_id' => 'id'])
+            ->where(['user_type'=>'employee']);
     }
 
     public function getFullName()

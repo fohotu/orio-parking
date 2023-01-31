@@ -2,8 +2,12 @@
 
 namespace admin\controllers;
 
+use Yii;
 use common\models\Employee;
+use common\models\Tenant;
 use common\models\search\EmployeeSearch;
+use common\models\form\EmployeeForm;
+use common\service\EmployeeService;
 use admin\controllers\BaseController;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -13,6 +17,15 @@ use yii\filters\VerbFilter;
  */
 class EmployeeController extends BaseController
 {
+        
+    private $service;
+
+    public function __construct($id, $module, $config = [],EmployeeService $service)
+    {
+        parent::__construct($id, $module,$config);
+        $this->service = $service;
+    }
+
     /**
      * @inheritDoc
      */
@@ -37,10 +50,7 @@ class EmployeeController extends BaseController
      * @return string
      */
     public function actionIndex($id)
-    {
-
-       
-      
+    { 
         $searchModel = new EmployeeSearch();
         $searchModel->tenant_id = $id;
         $dataProvider = $searchModel->search($this->request->queryParams);
@@ -69,30 +79,30 @@ class EmployeeController extends BaseController
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return string|\yii\web\Response
      */
-    public function actionCreate()
+    public function actionCreate($tenant)
     {
-        $model = new Employee();
-        $model->created_at = time();
-        if ($this->request->isPost) {
-            if ($model->load($this->request->post()) && $model->save()) {
-                $profile = new \common\models\Profile;
-                $profile->user_id = $model->id;
-                $profile->last_name = 'Polatov53';
-                $profile->patronymic = 'Rixsitilla ogli53';
-                $profile->name = 'Farkhod53';
-                $profile->user_type = 'employee';
-                
-                $profile->save();
-                
-                return $this->redirect(['view', 'id' => $model->id]);
-            }
-        } else {
-            $model->loadDefaultValues();
+        $tenantModel = Tenant::findOne($tenant);
+        if(!$tenantModel){
+            throw new NotFoundHttpException('The requested page does not exist.');
         }
+      
+
+        $model = new EmployeeForm();
+        $model->tenant_id = $tenantModel->id;
+
+        if ($this->request->isPost) {
+            if($model->load($this->request->post()) && $model->validate()){
+                $saved = $this->service->create($model->attributes);
+                if($saved){    
+                    return $this->redirect(['index', 'id' => $tenant]);
+                }
+            }
+        } 
 
         return $this->render('create', [
             'model' => $model,
         ]);
+
     }
 
     /**
@@ -104,15 +114,21 @@ class EmployeeController extends BaseController
      */
     public function actionUpdate($id)
     {
-        $model = $this->findModel($id);
-
-        if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        $model = Employee::find()->where(['id'=>$id])->with([
+            'car',
+            'profile',
+            'userParking'
+        ])->one();
+        
+        if($this->request->isPost){
+            $this->service->update($model,$this->request->post());
+            $this->redirect(['employee/index','id'=>$model->tenant_id]);
         }
-
+    
         return $this->render('update', [
             'model' => $model,
         ]);
+        
     }
 
     /**
@@ -126,7 +142,7 @@ class EmployeeController extends BaseController
     {
         $this->findModel($id)->delete();
 
-        return $this->redirect(['index']);
+        return $this->redirect(Yii::$app->request->referrer);
     }
 
     /**
@@ -144,4 +160,5 @@ class EmployeeController extends BaseController
 
         throw new NotFoundHttpException('The requested page does not exist.');
     }
+
 }

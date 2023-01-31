@@ -18,7 +18,7 @@ class TenantSearch extends Tenant
     {
         return [
             [['id', 'allocated_spaces_count', 'created_at', 'updated_at', 'created_by', 'deleted_at'], 'integer'],
-            [['tenant_name', 'tin', 'bic', 'checking_account', 'address', 'bank_name', 'cost_per_hour'], 'safe'],
+            [['tefullant_name', 'tin', 'bic', 'checking_account', 'address', 'bank_name', 'cost_per_hour'], 'safe'],
         ];
     }
 

@@ -72,8 +72,7 @@ class EmployeeSearch extends Employee
             return $dataProvider;
         }
 
-        var_dump(1);
-        var_dump($this->created_at);
+     
     
         // grid filtering conditions
         $query->andFilterWhere([
