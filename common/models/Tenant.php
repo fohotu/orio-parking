@@ -85,8 +85,11 @@ class Tenant extends \yii\db\ActiveRecord
     public function beforeSave($insert)
     {
         $t = time(); 
-        $this->created_by = 1;
-        $this->created_at = $t;
+        if($this->isNewRecord){
+            $this->created_by = 1;
+            $this->created_at = $t;
+            $this->created_at_string = Date("d-m-Y",$t);
+        }
         $this->updated_at = $t;
         return parent::beforeSave($insert);
     }

@@ -31,14 +31,14 @@ $this->params['breadcrumbs'][] = $this->title;
              },
              'buttons'=>[
                 'view'=>function($url,$model,$key){
-                    return Html::a('employees',['employee/index','id'=>$model->id],['class'=>'btn btn-info' ],['class'=>'glyphicon glyphicon-users']);
+                    return Html::a('Сотрудники',['employee/index','id'=>$model->id],['class'=>'btn btn-success' ],['class'=>'glyphicon glyphicon-users']);
                  
                 },
                 'update'=>function($url,$model,$key){
-                    return "<a href='".$url."' class='btn btn-info'>update</a>";
+                    return "<a href='".$url."' class='btn btn-success'>Обновить</a>";
                 },  
                 'delete' => function($url,$model,$key){
-                    return "<a href='".$url."'  data-method='post' data-confirm='". Yii::t('kvgrid', 'Are you sure to delete this 1{key}?',['item' => $key])."' class='btn btn-info'>delete</a>";
+                    return "<a href='".$url."'  data-method='post' data-confirm='". Yii::t('kvgrid', 'Are you sure to delete this 1{key}?',['item' => $key])."' class='btn btn-success'>Удалить</a>";
                 }
              ]
         ],

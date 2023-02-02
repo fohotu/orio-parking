@@ -24,7 +24,7 @@ class SiteController extends BaseController
                 'class' => AccessControl::class,
                 'rules' => [
                     [
-                        'actions' => ['login', 'error'],
+                        'actions' => ['login', 'error','user-role','user'],
                         'allow' => true,
                     ],
                     [
@@ -73,6 +73,32 @@ class SiteController extends BaseController
         $res = $r->get('1');
         var_dump($res);
         //return $this->render('index');
+    }
+
+
+    public function actionAdmin()
+    {
+        echo 'Admin';
+    }
+
+    public function actionTenant()
+    {
+        echo 'Tenant';
+    }
+
+    public function actionSecurity()
+    {
+        echo 'Security';
+    }
+
+    public function actionUserRole()
+    {
+        return $this->render('user-role');
+    }
+
+    public function actionUser()
+    {
+        return $this->render('user');
     }
 
     /**

@@ -22,6 +22,7 @@ class EmployeeSearch extends Employee
     {
         return [
             [['id','created_at', 'updated_at', 'created_by', 'deleted_at','tenant_id'], 'integer'],
+            [['created_at_string'], 'string', 'max' => 10],
             [['fullName'], 'safe']
             //[['fullName'], 'string', 'max' => 255],
         ];
@@ -63,6 +64,14 @@ class EmployeeSearch extends Employee
             'query' => $query,
         ]);
 
+        $dataProvider->sort->attributes['created_at_string'] = [
+            // The tables are the ones our relation are configured to
+            // in my case they are prefixed with "tbl_"
+            'asc' => ['employee.created_at' => SORT_ASC],
+            'desc' => ['employee.created_at' => SORT_DESC],
+        ];
+
+
         $this->load($params);
 
         if (!$this->validate()){
@@ -76,15 +85,12 @@ class EmployeeSearch extends Employee
     
         // grid filtering conditions
         $query->andFilterWhere([
-            'id' => $this->id,
-            'employee.created_at' => $this->created_at,
-            'employee.updated_at' => $this->updated_at,
+            'employee.created_at_string' => $this->created_at_string,
             'employee.created_by' => $this->created_by,
-            'employee.deleted_at' => $this->deleted_at,
             'tenant_id' => $this->tenant_id,
         ]);
 
-       
+        
 
      
          // filter by country name

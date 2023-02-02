@@ -38,16 +38,18 @@ $this->params['breadcrumbs'][] = $this->title;
                 }
             ],
             [
-                'attribute' => 'created_at',
+                'attribute' => 'created_at_string',
                 'label' => 'Дата регистрации',
                 'filterType' => GridView::FILTER_DATE,
+             
                 'filterWidgetOptions' => [
+                    //'convertFormat'=>true,
                     'pluginOptions' => [
                         'format'=>'dd-mm-yyyy'
                     ]
                 ],
                 'value' => function($model){
-                    return $model->createdDate;
+                    return $model->created_at_string;
                 }
             ],
             'created_by',
@@ -62,20 +64,22 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
             [
                 'class' => ActionColumn::className(),
+                'template' => '{update} {delete}',
                 'urlCreator' => function ($action, Employee $model, $key, $index, $column) {
                     return Url::toRoute([$action, 'id' => $model->id]);
                  },
                  'buttons'=>[
-                    'view'=>function($url,$model,$key){
+                    /*'view'=>function($url,$model,$key){
                         return Html::a('employees',$url,['class'=>'btn btn-info' ],['class'=>'glyphicon glyphicon-users']);
                      
                     },
+                    */
                     'update'=>function($url,$model,$key){
-                        return "<a href='".$url."' class='btn btn-info'>update</a>";
+                        return "<a href='".$url."' class='btn btn-success'>Обновить</a>";
                         //return Html::a('update',['update','id'=>$model->id,'tenant'=>$model->tenant_id],['class'=>'btn btn-info' ]);
                     },  
                     'delete' => function($url,$model,$key){
-                        return "<a href='".$url."'  data-method='post' data-confirm='". Yii::t('kvgrid', 'Are you sure to delete this 1{key}?',['item' => $key])."' class='btn btn-info'>delete</a>";
+                        return "<a href='".$url."'  data-method='post' data-confirm='". Yii::t('kvgrid', 'Are you sure to delete this 1{key}?',['item' => $key])."' class='btn btn-success'>Удалить</a>";
                         
                     }
                  ]

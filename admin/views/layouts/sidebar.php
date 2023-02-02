@@ -39,9 +39,8 @@
                         'label' => 'Арендатор',
                         'icon' => 'tachometer-alt',
                         'items' => [
-                            ['label' => 'Добавить новое', 'url' => ['site/index'], 'iconStyle' => 'far'],
-                            ['label' => 'Список арендаторов', 'url' => ['site/index'], 'iconStyle' => 'far'],
-                            ['label' => 'Сотрудники', 'url' => ['site/index'], 'iconStyle' => 'far'],
+                            ['label' => 'Добавить новое', 'url' => ['tenant/create'], 'iconStyle' => 'far'],
+                            ['label' => 'Список арендаторов', 'url' => ['tenant/index'], 'iconStyle' => 'far'],
                             
                         ]
                     ],

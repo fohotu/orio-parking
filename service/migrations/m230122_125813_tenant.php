@@ -26,6 +26,7 @@ class m230122_125813_tenant extends Migration
             'updated_at' => $this->integer()->notNull(),
             'created_by' => $this->integer()->notNull(),
             'deleted_at' => $this->integer(),
+            'created_at_string' => $this->string(8),
 
         ]);
 
