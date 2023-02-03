@@ -93,7 +93,152 @@ class SiteController extends BaseController
 
     public function actionUserRole()
     {
-        return $this->render('user-role');
+        $auth = Yii::$app->authManager;
+
+        $createTenant = $auth->createPermission('CreateTenant');
+        $createTenant->description = 'Создать арендатора';
+        $auth->add($createPost);
+
+        $browseTenant = $auth->createPermission('BrowseTenant');
+        $browseTenant->description = 'Обзор арендатора';
+        $auth->add($updatePost);
+
+
+        $updateTenant = $auth->createPermission('UpdateTenant');
+        $updateTenant->description = 'Изменить арендатора';
+        $auth->add($updatePost);
+
+        $deleteTenant = $auth->createPermission('DeleteTenant');
+        $deleteTenant->description = 'Удалить арендатора';
+        $auth->add($updatePost);
+
+
+        $createUser = $auth->createPermission('CreateUser');
+        $createUser->description = 'Создать пользователя';
+        $auth->add($createPost);
+
+        $browseUser = $auth->createPermission('BrowseUser');
+        $browseUser->description = 'Обзор пользователя';
+        $auth->add($updatePost);
+
+
+        $updateUser = $auth->createPermission('UpdateUser');
+        $updateUser->description = 'Изменить пользователя';
+        $auth->add($updatePost);
+
+        $deleteUser = $auth->createPermission('DeleteUser');
+        $deleteUser->description = 'Удалить пользователя';
+        $auth->add($updatePost);
+
+
+        $createEmployee = $auth->createPermission('CreateEmployee');
+        $createEmployee->description = 'Создать сотрудника';
+        $auth->add($createPost);
+
+        $browseEmployee = $auth->createPermission('BrowseEmployee');
+        $browseEmployee->description = 'Обзор сотрудника';
+        $auth->add($updatePost);
+
+
+        $updateEmployee = $auth->createPermission('UpdateEmployee');
+        $updateEmployee->description = 'Изменить сотрудника';
+        $auth->add($updatePost);
+
+        $deleteEmployee = $auth->createPermission('DeleteEmployee');
+        $deleteEmployee->description = 'Удалить сотрудника';
+        $auth->add($updatePost);
+
+
+
+        $createYourEmployee = $auth->createPermission('CreateYourEmployee');
+        $createEmployee->description = 'Создать свою сотрудника';
+        $auth->add($createYourEmployee);
+
+        $browseYourEmployee = $auth->createPermission('BrowseYourEmployee');
+        $browseEmployee->description = 'Обзор свою сотрудника';
+        $auth->add($browseYourEmployee);
+
+
+        $updateYourEmployee = $auth->createPermission('UpdateYourEmployee');
+        $updateEmployee->description = 'Изменить свою сотрудника';
+        $auth->add($updateYourEmployee);
+
+        $deleteYourEmployee = $auth->createPermission('DeleteYourEmployee');
+        $deleteEmployee->description = 'Удалить свою сотрудника';
+        $auth->add($deleteYourEmployee);
+
+
+        $browseSettings = $auth->createPermission('BrowseSettings');
+        $browseSettings->description = 'Обзор настроек';
+        $auth->add($updatePost);
+
+        $updateSettings = $auth->createPermission('UpdateSettings');
+        $updateSettings->description = 'Изменить настроек';
+        $auth->add($updatePost);
+
+
+        $tenant = $auth->createRole('tenant');
+        $auth->add($tenant);
+        
+        //Tenant
+        $auth->addChild($tenant, $createEmployee);    
+        $auth->addChild($tenant, $browseEmployee);    
+        $auth->addChild($tenant, $updateEmployee);   
+        $auth->addChild($tenant, $deleteEmployee);    
+        //
+
+
+        $admin = $auth->createRole('admin');
+        $auth->add($admin);
+        //Admin
+        $auth->addChild($admin,  $createTenant);    
+        $auth->addChild($admin,  $browseTenant);    
+        $auth->addChild($admin,  $updateTenant); 
+        $auth->addChild($admin,  $deleteTenant);    
+        
+        $auth->addChild($admin,  $createUser);    
+        $auth->addChild($admin,  $browseUser);    
+        $auth->addChild($admin,  $updateUser); 
+        $auth->addChild($admin,  $deleteUser);   
+
+        $auth->addChild($admin,  $browseSettings);    
+        $auth->addChild($admin,  $updateSettings);
+
+        //
+
+
+        //$auth->addChild($admin, $createPost);    
+
+
+
+
+
+
+       
+
+
+
+
+
+
+
+        // добавляем роль "author" и даём роли разрешение "createPost"
+        $author = $auth->createRole('author');
+        $auth->add($author);
+        $auth->addChild($author, $createPost);
+
+        // добавляем роль "admin" и даём роли разрешение "updatePost"
+        // а также все разрешения роли "author"
+        $admin = $auth->createRole('admin');
+        $auth->add($admin);
+        $auth->addChild($admin, $updatePost);
+        $auth->addChild($admin, $author);
+
+        // Назначение ролей пользователям. 1 и 2 это IDs возвращаемые IdentityInterface::getId()
+        // обычно реализуемый в модели User.
+        $auth->assign($author, 2);
+        $auth->assign($admin, 1);
+        //return $this->render('user-role');
     }
 
     public function actionUser()
