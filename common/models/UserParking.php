@@ -84,15 +84,11 @@ class UserParking extends \yii\db\ActiveRecord
     {
         if (!parent::beforeSave($insert)) {
             return false;
-        }
-
-      
-
+        } 
         //$this->end_date = Yii::$app->formatter->asDate($this->end_date, 'U');
-
-      //  var_dump($this->end_date);
+        //var_dump($this->end_date);
+        return true; 
         
-        return true;
     }
 
 }

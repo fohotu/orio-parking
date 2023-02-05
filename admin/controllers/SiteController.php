@@ -32,6 +32,21 @@ class SiteController extends BaseController
                         'allow' => true,
                         //'roles' => ['@'],
                     ],
+                    [
+                        'actions' => ['admin'],
+                        'allow' => true,
+                        'roles' => ['admin'],
+                    ],
+                    [
+                        'actions' => ['mod'],
+                        'allow' => true,
+                        'roles' => ['moderator'],
+                    ],
+                    [
+                        'actions' => ['tenant'],
+                        'allow' => true,
+                        'roles' => ['tenant'],
+                    ],
                 ],
             ],
             'verbs' => [
@@ -90,111 +105,148 @@ class SiteController extends BaseController
     {
         echo 'Security';
     }
+    public function actionMod()
+    {
+        echo 'Moderator';
+    }
 
     public function actionUserRole()
     {
+        /*
+      
         $auth = Yii::$app->authManager;
 
         $createTenant = $auth->createPermission('CreateTenant');
         $createTenant->description = 'Создать арендатора';
-        $auth->add($createPost);
+        $auth->add($createTenant);
 
         $browseTenant = $auth->createPermission('BrowseTenant');
         $browseTenant->description = 'Обзор арендатора';
-        $auth->add($updatePost);
+        $auth->add($browseTenant);
 
 
         $updateTenant = $auth->createPermission('UpdateTenant');
         $updateTenant->description = 'Изменить арендатора';
-        $auth->add($updatePost);
+        $auth->add($updateTenant);
 
         $deleteTenant = $auth->createPermission('DeleteTenant');
         $deleteTenant->description = 'Удалить арендатора';
-        $auth->add($updatePost);
+        $auth->add($deleteTenant);
 
 
         $createUser = $auth->createPermission('CreateUser');
         $createUser->description = 'Создать пользователя';
-        $auth->add($createPost);
+        $auth->add($createUser);
 
         $browseUser = $auth->createPermission('BrowseUser');
         $browseUser->description = 'Обзор пользователя';
-        $auth->add($updatePost);
+        $auth->add($browseUser);
 
 
         $updateUser = $auth->createPermission('UpdateUser');
         $updateUser->description = 'Изменить пользователя';
-        $auth->add($updatePost);
+        $auth->add($updateUser);
 
         $deleteUser = $auth->createPermission('DeleteUser');
         $deleteUser->description = 'Удалить пользователя';
-        $auth->add($updatePost);
+        $auth->add($deleteUser);
 
 
         $createEmployee = $auth->createPermission('CreateEmployee');
         $createEmployee->description = 'Создать сотрудника';
-        $auth->add($createPost);
+        $auth->add($createEmployee);
 
         $browseEmployee = $auth->createPermission('BrowseEmployee');
         $browseEmployee->description = 'Обзор сотрудника';
-        $auth->add($updatePost);
+        $auth->add($browseEmployee);
 
 
         $updateEmployee = $auth->createPermission('UpdateEmployee');
         $updateEmployee->description = 'Изменить сотрудника';
-        $auth->add($updatePost);
+        $auth->add($updateEmployee);
 
         $deleteEmployee = $auth->createPermission('DeleteEmployee');
         $deleteEmployee->description = 'Удалить сотрудника';
-        $auth->add($updatePost);
+        $auth->add($deleteEmployee);
 
+
+    
+        $rule = new \common\rbac\TenantRule;
+        $auth->add($rule);
 
 
         $createYourEmployee = $auth->createPermission('CreateYourEmployee');
-        $createEmployee->description = 'Создать свою сотрудника';
+        $createYourEmployee->description = 'Создать свою сотрудника';
+        $createYourEmployee->ruleName = $rule->name; 
         $auth->add($createYourEmployee);
 
         $browseYourEmployee = $auth->createPermission('BrowseYourEmployee');
-        $browseEmployee->description = 'Обзор свою сотрудника';
+        $browseYourEmployee->description = 'Обзор свою сотрудника';
+        $browseYourEmployee->ruleName = $rule->name; 
         $auth->add($browseYourEmployee);
 
 
         $updateYourEmployee = $auth->createPermission('UpdateYourEmployee');
-        $updateEmployee->description = 'Изменить свою сотрудника';
+        $updateYourEmployee->description = 'Изменить свою сотрудника';
+        $updateYourEmployee->ruleName = $rule->name; 
         $auth->add($updateYourEmployee);
 
         $deleteYourEmployee = $auth->createPermission('DeleteYourEmployee');
-        $deleteEmployee->description = 'Удалить свою сотрудника';
+        $deleteYourEmployee->description = 'Удалить свою сотрудника';
+        $deleteYourEmployee->ruleName = $rule->name; 
         $auth->add($deleteYourEmployee);
 
 
         $browseSettings = $auth->createPermission('BrowseSettings');
         $browseSettings->description = 'Обзор настроек';
-        $auth->add($updatePost);
+        $auth->add($browseSettings);
 
         $updateSettings = $auth->createPermission('UpdateSettings');
         $updateSettings->description = 'Изменить настроек';
-        $auth->add($updatePost);
+        $auth->add($updateSettings);
 
-
-        $tenant = $auth->createRole('tenant');
-        $auth->add($tenant);
-        
         //Tenant
-        $auth->addChild($tenant, $createEmployee);    
-        $auth->addChild($tenant, $browseEmployee);    
-        $auth->addChild($tenant, $updateEmployee);   
-        $auth->addChild($tenant, $deleteEmployee);    
-        //
+     
+        $tenant = $auth->createRole('tenant');
+        //is_same_company
+
+        $auth->add($tenant);
+
+   
+        $auth->addChild($tenant, $createYourEmployee);    
+        $auth->addChild($tenant, $browseYourEmployee);    
+        $auth->addChild($tenant, $updateYourEmployee);   
+        $auth->addChild($tenant, $deleteYourEmployee);    
+        
+        //--
+        
+       
 
 
-        $admin = $auth->createRole('admin');
-        $auth->add($admin);
+        //Moderator
+        
+        $moderator = $auth->createRole('moderator');
+        $auth->add($moderator);
+        
+
+        $auth->addChild($moderator, $createEmployee);    
+        $auth->addChild($moderator, $browseEmployee);    
+        $auth->addChild($moderator, $updateEmployee);   
+        $auth->addChild($moderator, $deleteEmployee);    
+
+        $auth->addChild($moderator,  $createTenant);    
+        $auth->addChild($moderator,  $browseTenant);    
+        $auth->addChild($moderator,  $updateTenant); 
+        $auth->addChild($moderator,  $deleteTenant);   
+        
+        $auth->addChild($moderator,$tenant);
+        
+        //--
+
+
         //Admin
-        $auth->addChild($admin,  $createTenant);    
-        $auth->addChild($admin,  $browseTenant);    
-        $auth->addChild($admin,  $updateTenant); 
-        $auth->addChild($admin,  $deleteTenant);    
+        $admin = $auth->createRole('admin');
+        $auth->add($admin); 
         
         $auth->addChild($admin,  $createUser);    
         $auth->addChild($admin,  $browseUser);    
@@ -204,46 +256,72 @@ class SiteController extends BaseController
         $auth->addChild($admin,  $browseSettings);    
         $auth->addChild($admin,  $updateSettings);
 
-        //
+        $auth->addChild($admin,$moderator);
+
+        //--
+        
 
 
-        //$auth->addChild($admin, $createPost);    
+  
+
+        $user = new \common\models\User();
+        $user->username = 'admin';
+        $user->email = 'admin@mail.loc';
+        $user->setPassword('123456');
+        $user->generateAuthKey();
+        $user->save(false);
+
+        // нужно добавить следующие три строки:
+        $auth = Yii::$app->authManager;
+        $authorRole = $auth->getRole('admin');
+        $auth->assign($authorRole, $user->getId());
+        Yii::$app->user->logout();
 
 
 
+        $user = new \common\models\User();
+        $user->username = 'moderator';
+        $user->email = 'moderator@mail.loc';
+        $user->setPassword('123456');
+        $user->generateAuthKey();
+        $user->save(false);
+
+        // нужно добавить следующие три строки:
+        $auth = Yii::$app->authManager;
+        $authorRole = $auth->getRole('moderator');
+        $auth->assign($authorRole, $user->getId());
+        Yii::$app->user->logout();
 
 
+        $user = new \common\models\User();
+        $user->username = 'tenant';
+        $user->email = 'tenant@mail.loc';
+        $user->setPassword('123456');
+        $user->generateAuthKey();
+        $user->save(false);
 
+        // нужно добавить следующие три строки:
+        $auth = Yii::$app->authManager;
+        $authorRole = $auth->getRole('tenant');
+        $auth->assign($authorRole, $user->getId());
+        Yii::$app->user->logout();
+        */
+       // return $user;
+     
+ //       $cu = \Yii::$app->user->can('DeleteYourEmployee');
+   //     var_dump($cu);
+      //  Yii::$app->user->logout();
+        echo 'Roles Created';
        
 
-
-
-
-
-
-
-        // добавляем роль "author" и даём роли разрешение "createPost"
-        $author = $auth->createRole('author');
-        $auth->add($author);
-        $auth->addChild($author, $createPost);
-
-        // добавляем роль "admin" и даём роли разрешение "updatePost"
-        // а также все разрешения роли "author"
-        $admin = $auth->createRole('admin');
-        $auth->add($admin);
-        $auth->addChild($admin, $updatePost);
-        $auth->addChild($admin, $author);
-
-        // Назначение ролей пользователям. 1 и 2 это IDs возвращаемые IdentityInterface::getId()
-        // обычно реализуемый в модели User.
-        $auth->assign($author, 2);
-        $auth->assign($admin, 1);
-        //return $this->render('user-role');
     }
 
     public function actionUser()
     {
-        return $this->render('user');
+        $r= \Yii::$app->user->logout();
+        //$cu = Yii::$app->user->can('CreateTenant');
+        //var_dump($cu);
+       // return $this->render('user');
     }
 
     /**

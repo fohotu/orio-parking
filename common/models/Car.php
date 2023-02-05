@@ -37,6 +37,19 @@ class Car extends \yii\db\ActiveRecord
         ];
     }
 
+    public function getHistory()
+    {
+        return $this->hasMany(ParkingHistory::class,['car_id'=>'id']);
+    }
+
+    public function getEmployee()
+    {
+        return $this->hasOne(Employee::class, ['id' => 'user_id'])
+            ->viaTable('user_car', ['car_id' => 'id'],function($query){
+                $query->andWhere(['user_car.user_type'=>'employee']);
+            });
+    }
+
     /**
      * {@inheritdoc}
      */

@@ -40,7 +40,7 @@ class TenantSearch extends Tenant
      */
     public function search($params)
     {
-        $query = Tenant::find();
+        $query = Tenant::find();  
 
         // add conditions that should always apply here
 
@@ -76,4 +76,58 @@ class TenantSearch extends Tenant
 
         return $dataProvider;
     }
+
+
+
+    public function searchWithRelation($params)
+    {
+        $query = Tenant::find()->with(
+            [
+            'employee'=>function($query){
+                $query->with([
+                    'car'=>function($query){
+                        $query->with([
+                            'history'
+                        ]);
+                    },
+                ]);
+            }]
+        ); 
+
+        // add conditions that should always apply here
+
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+        ]);
+
+        $this->load($params);
+
+        if (!$this->validate()) {
+            // uncomment the following line if you do not want to return any records when validation fails
+            // $query->where('0=1');
+            return $dataProvider;
+        }
+
+        // grid filtering conditions
+        $query->andFilterWhere([
+            'id' => $this->id,
+            'allocated_spaces_count' => $this->allocated_spaces_count,
+            'created_at' => $this->created_at,
+            'updated_at' => $this->updated_at,
+            'created_by' => $this->created_by,
+            'deleted_at' => $this->deleted_at,
+        ]);
+
+        $query->andFilterWhere(['like', 'tenant_name', $this->tenant_name])
+            ->andFilterWhere(['like', 'tin', $this->tin])
+            ->andFilterWhere(['like', 'bic', $this->bic])
+            ->andFilterWhere(['like', 'checking_account', $this->checking_account])
+            ->andFilterWhere(['like', 'address', $this->address])
+            ->andFilterWhere(['like', 'bank_name', $this->bank_name])
+            ->andFilterWhere(['like', 'cost_per_hour', $this->cost_per_hour]);
+
+        return $dataProvider;
+    }
+
+
 }

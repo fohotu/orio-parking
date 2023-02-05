@@ -33,6 +33,12 @@ class Tenant extends \yii\db\ActiveRecord
         return '{{%tenant}}';
     }
 
+   
+    public function getEmployee()
+    {
+        return $this->hasMany(Employee::class,['tenant_id'=>'id']);
+    }
+
     /**
      * {@inheritdoc}
      */
