@@ -22,12 +22,21 @@ $this->params['breadcrumbs'][] = $this->title;
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'columns' => [
+        
+            [
+                'attribute' => 'company',
+                'value' => function($model){
+                        if($model->car->employee){
+                            return $model->car->employee->company->tenant_name;
+                        }
+                }
+            ],
             [
                 'attribute' => 'employee',
                 'value' => function($model){
-                        if($model->car->employee){
-                            return $model->car->employee->company->tenant_name.'--'.$model->car->employee->profile->name;
-                        }
+                    if($model->car->employee){
+                       return  $model->car->employee->fullName;
+                    }
                 }
             ],
             [

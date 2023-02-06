@@ -38,6 +38,8 @@ class HistoryController extends Controller
      */
     public function actionIndex()
     {
+       
+       
         $searchModel = new ParkingHistorySearch();
         $dataProvider = $searchModel->search($this->request->queryParams);
 

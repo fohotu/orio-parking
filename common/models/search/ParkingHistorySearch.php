@@ -16,13 +16,14 @@ class ParkingHistorySearch extends ParkingHistory
      */
 
     public $employee;
+    public $company;
     public $car_number;
 
     public function rules()
     {
         return [
             [['id', 'car_id', 'action_date', 'enter_date', 'exit_date'], 'integer'],
-            [['car_number'], 'string'],
+            [['car_number','employee','company'], 'string'],
             [['action_type'], 'safe'],
         ];
     }
@@ -47,7 +48,21 @@ class ParkingHistorySearch extends ParkingHistory
     {
         $query = ParkingHistory::find()
             ->joinWith([
-                'car', 
+                'car'=>function($query){
+                    $query->joinWith([
+                        'employee'=>function($query){
+                            $query->joinWith([
+                                'profile'=>function($query){
+                                    $query->where(
+                                        [
+                                        'like', 'profile.name', $this->employee
+                                        ]
+                                        );
+                                }
+                            ]);
+                        }
+                    ]);
+                }, 
             ]);
 
         // add conditions that should always apply here
@@ -55,6 +70,7 @@ class ParkingHistorySearch extends ParkingHistory
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
         ]);
+
 
         $this->load($params);
 
@@ -75,6 +91,8 @@ class ParkingHistorySearch extends ParkingHistory
 
         $query->andFilterWhere(['like', 'action_type', $this->action_type]);
         $query->andFilterWhere(['like', 'car.car_number', $this->car_number]);
+        // $query->andFilterWhere(['like', 'employee.name', $this->employee]);
+        $query->andFilterWhere(['like', 'tenant.tenant_name', $this->company]);
 
         return $dataProvider;
     }
