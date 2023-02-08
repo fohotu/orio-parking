@@ -13,7 +13,7 @@
                 <img src="<?=$assetDir?>/img/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image">
             </div>
             <div class="info">
-                <a href="#" class="d-block">Alexander Pierce</a>
+                <a href="#" class="d-block">Administrator</a>
             </div>
         </div>
 
@@ -51,6 +51,11 @@
                             ['label' => 'Список пользователей', 'url' => ['site/index'], 'iconStyle' => 'far'],
                             ['label' => 'Добавить новое', 'url' => ['site/index'], 'iconStyle' => 'far'],
                         ]
+                    ],
+                    [
+                        'label' => 'История посещений',
+                        'icon' => 'user',
+                        'url' => ['history/index']
                     ],
                     [
                         'label' => 'Настройки',

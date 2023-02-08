@@ -16,12 +16,14 @@ class EmployeeSearch extends Employee
      */
 
     public $fullName;
+    public $balance;
+
   
 
     public function rules()
     {
         return [
-            [['id','created_at', 'updated_at', 'created_by', 'deleted_at','tenant_id'], 'integer'],
+            [['id','created_at', 'updated_at', 'created_by', 'deleted_at','tenant_id','balance'], 'integer'],
             [['created_at_string'], 'string', 'max' => 10],
             [['fullName'], 'safe']
             //[['fullName'], 'string', 'max' => 255],

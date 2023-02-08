@@ -21,6 +21,7 @@ class m230122_130018_user_parking extends Migration
             'created_at' => $this->integer()->notNull(),
             'updated_at' => $this->integer()->notNull(),
             'deleted_at' => $this->integer(),
+            
         ]);
     }
 

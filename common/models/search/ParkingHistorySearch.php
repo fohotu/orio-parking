@@ -52,13 +52,16 @@ class ParkingHistorySearch extends ParkingHistory
                     $query->joinWith([
                         'employee'=>function($query){
                             $query->joinWith([
+                                'profile',
+                                /*
                                 'profile'=>function($query){
                                     $query->where(
                                         [
                                         'like', 'profile.name', $this->employee
                                         ]
                                         );
-                                }
+                                         
+                                }*/
                             ]);
                         }
                     ]);
@@ -93,6 +96,9 @@ class ParkingHistorySearch extends ParkingHistory
         $query->andFilterWhere(['like', 'car.car_number', $this->car_number]);
         // $query->andFilterWhere(['like', 'employee.name', $this->employee]);
         $query->andFilterWhere(['like', 'tenant.tenant_name', $this->company]);
+        $query->andFilterWhere(['like', 'profile.name', $this->employee]);
+        $query->orFilterWhere(['like', 'profile.patronymic', $this->employee]);
+        $query->orFilterWhere(['like', 'profile.last_name', $this->employee]);
 
         return $dataProvider;
     }

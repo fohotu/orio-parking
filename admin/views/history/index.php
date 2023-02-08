@@ -19,12 +19,31 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <?= GridView::widget([
+        'id' => 'kv-grid-history',
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
+        'headerContainer' => ['style' => 'top:50px', 'class' => 'kv-table-header'], // offset from top
+       // 'floatHeader' => true, // table header floats when you scroll
+        'floatPageSummary' => true, // table page summary floats when you scroll
+        'floatFooter' => false, // disable floating of table footer
+      //  'pjax' => true, // pjax is set to always false for this demo
+        // parameters from the demo form
+        'responsive' => false,
+        'bordered' => true,
+        'striped' => false,
+        'condensed' => true,
+        'hover' => true,
+        'showPageSummary' => true,
+        'panel' => [
+           // 'heading' => '<i class="fas fa-book">Арендаторы</i>  ',
+            'type' => 'default',
+        ],
+      
         'columns' => [
         
             [
                 'attribute' => 'company',
+                'label'=>'Арендатор',
                 'value' => function($model){
                         if($model->car->employee){
                             return $model->car->employee->company->tenant_name;
@@ -33,6 +52,7 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
             [
                 'attribute' => 'employee',
+                'label' => 'Сотрудник',
                 'value' => function($model){
                     if($model->car->employee){
                        return  $model->car->employee->fullName;
@@ -41,13 +61,14 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
             [
                 'attribute'=>'car_number',
+                'label' => 'Номер машины',
                 'value' => function($model){
                     return $model->car->car_number;
                 }
             ],
             [
                 'attribute' => 'enter_date',
-                'label' => 'Дата регистрации',
+                'label' => 'Дата въезда',
                 'filterType' => GridView::FILTER_DATE,
              
                 'filterWidgetOptions' => [
@@ -57,16 +78,24 @@ $this->params['breadcrumbs'][] = $this->title;
                     ]
                 ],
                 'value' => function($model){
-                    return $model->enter_date;
+                    return Date("d-m-Y  H:i:s",$model->enter_date);
                 }
             ],
-            'exit_date',
             [
+                'attribute'=>'exit_date',
+                'label' => 'Дата выезда',
+                'value' => function($model){
+                    return Date("d-m-Y  H:i:s",$model->enter_date);
+                },
+            ],
+           
+            
+            /*[
                 'class' => ActionColumn::className(),
                 'urlCreator' => function ($action, ParkingHistory $model, $key, $index, $column) {
                     return Url::toRoute([$action, 'id' => $model->id]);
                  }
-            ],
+            ],*/
         ],
     ]); ?>
 

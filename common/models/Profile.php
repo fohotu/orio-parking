@@ -33,6 +33,11 @@ class Profile extends \yii\db\ActiveRecord
         return $this->hasOne(Employee::class,['user_id'=>'id'])->where(['user_type'=>'employee']);
     }
 
+    public function getFullName()
+    {
+        
+    }
+
     /**
      * {@inheritdoc}
      */

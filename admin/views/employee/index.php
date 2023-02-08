@@ -26,6 +26,10 @@ $this->params['breadcrumbs'][] = $this->title;
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'id' => 'employee-grid',
+        'rowOptions'=>function($model){
+            if($model->id % 3==0)
+            return ['class' => 'kartik-sheet-style-123'];
+        },
         'columns' => [
             [
                 'attribute' => 'fullName',
@@ -61,6 +65,20 @@ $this->params['breadcrumbs'][] = $this->title;
                     if($model->company)
                         return $model->company->tenant_name;
                 }
+            ],
+            [
+                'attribute'=>'balance',
+                'label' => 'остаток',
+                'value' => function($model){
+                    $sim = "";
+                    if($model->id % 3==0)
+                    {
+                        $sim = "-";
+                    }
+                    return $sim.rand(100,500);
+                },
+                
+
             ],
             [
                 'class' => ActionColumn::className(),
