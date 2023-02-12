@@ -27,18 +27,24 @@ $this->params['breadcrumbs'][] = $this->title;
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'columns' => [
-            
-            'username',
-            'email:email',
+            [
+                'attribute'=>'fullName',
+                'label' => 'Полное имя',
+            ],
+            [
+                'attribute' => 'username',
+                'label' => 'Логин'
+            ],
+            [
+                'attribute'=>'email',
+                'label' =>'Электронная почта'
+
+            ],
             [
                 'attribute'=>'status',
+                'label'=>'Статус',
                 'value' =>function($model){
-                    $role= Yii::$app->authManager->getRolesByUser($model->id);
-                    $r="";
-                    foreach($role as $item){
-                        $r.=$item->name."/";
-                    }
-                    return $r;
+                    return $model->status;
                 }, 
             ], 
             //'created_at',

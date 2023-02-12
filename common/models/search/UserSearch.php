@@ -14,11 +14,14 @@ class UserSearch extends User
     /**
      * {@inheritdoc}
      */
+
+     public $fullName;
     public function rules()
     {
         return [
             [['id', 'status', 'created_at', 'updated_at', 'tenant_id'], 'integer'],
             [['username', 'auth_key', 'password_hash', 'password_reset_token', 'email', 'verification_token'], 'safe'],
+            [['fullName'],'string'],
         ];
     }
 
@@ -40,7 +43,14 @@ class UserSearch extends User
      */
     public function search($params)
     {
-        $query = User::find();
+        $query = User::find()
+        ->joinWith([
+            'profile',
+            ]    
+        );
+
+        
+       
 
         // add conditions that should always apply here
 
@@ -66,12 +76,26 @@ class UserSearch extends User
         ]);
 
         $query->andFilterWhere(['like', 'username', $this->username])
-            ->andFilterWhere(['like', 'auth_key', $this->auth_key])
-            ->andFilterWhere(['like', 'password_hash', $this->password_hash])
-            ->andFilterWhere(['like', 'password_reset_token', $this->password_reset_token])
-            ->andFilterWhere(['like', 'email', $this->email])
-            ->andFilterWhere(['like', 'verification_token', $this->verification_token]);
+            ->andFilterWhere(['like', 'email', $this->email]);
+
+
+            $query->andFilterWhere(['like', 'profile.name', $this->fullName]);
+            $query->orFilterWhere(['like', 'profile.last_name', $this->fullName]);
+            $query->orFilterWhere(['like', 'profile.patronymic', $this->fullName]);
 
         return $dataProvider;
+    }
+
+
+
+    public function attributeLabels()
+    {
+        return [
+            'fullName' => 'Полное имя',
+            'username' => 'Логин',
+            'email' => 'Электронная почта',
+            'status' => 'Статус',
+            'tenant_id' => 'Организация',
+        ];
     }
 }

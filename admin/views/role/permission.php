@@ -9,7 +9,7 @@ use yii\helpers\Html;
     <?php 
         $form = ActiveForm::begin();
     ?>
-        <button type="submit">save</button>
+        <button type="submit" class="btn btn-primary">Сохранять</button>
         
     <table class="table table-bordered">
         <tr>
@@ -30,7 +30,7 @@ use yii\helpers\Html;
         <tr>
             <td>
                 <?php 
-                    echo $v->name."-".$v->description;
+                    echo $v->description;
                 ?>
             </td>
 

@@ -60,6 +60,19 @@ class User extends ActiveRecord implements IdentityInterface
         ];
     }
 
+
+    public function getProfile()
+    {
+        return $this->hasOne(Profile::class,['user_id'=>'id'])
+            ->where(['profile.user_type'=>'user']);
+    }
+
+
+    public function getFullName()
+    {
+        return $this->profile->name.' '.$this->profile->last_name.' '.$this->profile->patronymic;
+    }
+
     /**
      * {@inheritdoc}
      */

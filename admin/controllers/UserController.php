@@ -3,7 +3,9 @@
 namespace admin\controllers;
 
 use common\models\User;
+use common\models\form\UserForm;
 use common\models\search\UserSearch;
+use common\service\UserService;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -13,6 +15,15 @@ use yii\filters\VerbFilter;
  */
 class UserController extends Controller
 {
+
+
+    private $service;
+
+    public function __construct($id, $module, $config = [],UserService $service)
+    {
+        parent::__construct($id, $module,$config);
+        $this->service = $service;
+    }
     /**
      * @inheritDoc
      */
@@ -38,6 +49,17 @@ class UserController extends Controller
      */
     public function actionIndex()
     {
+/*
+        $profile = new \common\models\Profile;
+        $profile->user_id = 3;
+        $profile->last_name = 'Долохова';    
+        $profile->patronymic = 'Ивановна';
+        $profile->phone_number = '223456789';
+        $profile->user_type = 'user';
+        $profile->name = 'Марья';
+        $profile->save();
+        */
+
         $searchModel = new UserSearch();
         $dataProvider = $searchModel->search($this->request->queryParams);
 
@@ -67,15 +89,16 @@ class UserController extends Controller
      */
     public function actionCreate()
     {
-        $model = new User();
+        $model = new UserForm();
 
+        
         if ($this->request->isPost) {
-            if ($model->load($this->request->post()) && $model->save()) {
-                return $this->redirect(['view', 'id' => $model->id]);
+            if ($model->load($this->request->post()) && $model->validate()) {
+                //var_dump($model->attributes);exit;
+                $r=$this->service->create($model->attributes);
+                var_dump($r);
             }
-        } else {
-            $model->loadDefaultValues();
-        }
+        } 
 
         return $this->render('create', [
             'model' => $model,

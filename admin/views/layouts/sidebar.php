@@ -37,32 +37,30 @@
                 'items' => [
                     [
                         'label' => 'Арендатор',
-                        'icon' => 'tachometer-alt',
+                        'icon' => 'car',
                         'items' => [
-                            ['label' => 'Добавить новое', 'url' => ['tenant/create'], 'iconStyle' => 'far'],
-                            ['label' => 'Список арендаторов', 'url' => ['tenant/index'], 'iconStyle' => 'far'],
+                            ['label' => 'Добавить новое', 'url' => ['tenant/create'], 'icon' => 'file'],
+                            ['label' => 'Список арендаторов', 'url' => ['tenant/index'], 'icon' => 'file'],
                             
-                        ]
+                        ],
+                        'options'=>[
+                            'active'=>true,
+                        ],
+                        
                     ],
-                    [
-                        'label' => 'Пользователи',
-                        'icon' => 'user',
-                        'items' => [
-                            ['label' => 'Список пользователей', 'url' => ['site/index'], 'iconStyle' => 'far'],
-                            ['label' => 'Добавить новое', 'url' => ['site/index'], 'iconStyle' => 'far'],
-                        ]
-                    ],
+                   
                     [
                         'label' => 'История посещений',
-                        'icon' => 'user',
+                        'icon' => 'book',
                         'url' => ['history/index']
                     ],
                     [
                         'label' => 'Настройки',
                         'icon' => 'cog',
                         'items' => [
-                            ['label' => 'Общий', 'url' => ['site/index'], 'iconStyle' => 'far'],
-                            ['label' => 'Другие', 'url' => ['site/index'], 'iconStyle' => 'far'],
+                            ['label' => 'Пользователей', 'url' => ['user/index'], 'icon' => 'file'],
+                            ['label' => 'Роли', 'url' => ['role/index'], 'icon' => 'file'],
+                            ['label' => 'Разрешение', 'url' => ['role/permission'], 'icon' => 'file'],
                         ]
                     ],
                     

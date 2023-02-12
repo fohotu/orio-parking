@@ -103,3 +103,7 @@ a.desc:after {
 .btn{
     border-radius:2px;
 }
+
+.mt-2 .nav-item a.nav-link{
+    font-size: 14px;
+}

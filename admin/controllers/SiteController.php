@@ -207,6 +207,9 @@ class SiteController extends BaseController
         $updateSettings->description = 'Изменить настроек';
         $auth->add($updateSettings);
 
+
+        
+
     }
 
     public function actionUserRole()
