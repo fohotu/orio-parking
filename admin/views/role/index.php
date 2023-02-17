@@ -4,7 +4,7 @@ use yii\helpers\Url;
 <div class="container">
     <div class="row">
         <div class="col-md-6">
-            <a href="#" class="btn btn-success">Create</a>
+            <a href="<?php echo Url::to(['create'])?>" class="btn btn-success">Create</a>
             <table class="table table-bordered">
 
                 <?php 

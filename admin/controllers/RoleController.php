@@ -44,11 +44,16 @@ class RoleController extends BaseController
         return $this->render('create',['model'=>$model]);
     }
 
-    public function actionDelete()
+    public function actionDelete($role)
     {
         if(Yii::$app->request->isPost){
             $post = Yii::$app->request->post();
-            var_dump($post);
+            $auth = Yii::$app->authManager;
+            $roleAuth = $auth->getRole($role);
+            if($roleAuth){
+                $auth->remove($roleAuth);
+                $this->redirect(['index']);
+            }
         }
     }
 
