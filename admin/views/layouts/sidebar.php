@@ -38,13 +38,14 @@
                     [
                         'label' => 'Арендатор',
                         'icon' => 'car',
+                      
+                        'itemOptions'=>[
+                            'active' => true,
+                        ],
                         'items' => [
                             ['label' => 'Добавить новое', 'url' => ['tenant/create'], 'icon' => 'file'],
                             ['label' => 'Список арендаторов', 'url' => ['tenant/index'], 'icon' => 'file'],
                             
-                        ],
-                        'options'=>[
-                            'active'=>true,
                         ],
                         
                     ],
@@ -57,7 +58,9 @@
                     [
                         'label' => 'Настройки',
                         'icon' => 'cog',
+                       
                         'items' => [
+                            
                             ['label' => 'Пользователей', 'url' => ['user/index'], 'icon' => 'file'],
                             ['label' => 'Роли', 'url' => ['role/index'], 'icon' => 'file'],
                             ['label' => 'Разрешение', 'url' => ['role/permission'], 'icon' => 'file'],

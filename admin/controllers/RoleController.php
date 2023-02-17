@@ -44,6 +44,36 @@ class RoleController extends BaseController
         return $this->render('create',['model'=>$model]);
     }
 
+    public function actionDelete()
+    {
+        if(Yii::$app->request->isPost){
+            $post = Yii::$app->request->post();
+            var_dump($post);
+        }
+    }
+
+    public function actionEdit($role)
+    {
+        $modelForm = new \common\models\form\RoleForm;
+        $model = Yii::$app->authManager->getRole($role);
+        $modelForm->displayname = $model->description;
+        $modelForm->name = $model->name;
+
+        if(Yii::$app->request->isPost){
+            if($modelForm->load(Yii::$app->request->post()) && $modelForm->validate()){
+                $auth = Yii::$app->authManager;
+                $model->description = $modelForm->displayname;
+                $model->name = $modelForm->name;
+                
+                $r = $auth->update($role,$model);
+                if($r)
+                $this->redirect(['index']);
+            }
+        }
+        
+        return $this->render('edit',['model'=>$model,'modelForm'=>$modelForm]);
+    }
+
 
     public function actionIndex()
     {

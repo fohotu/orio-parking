@@ -107,3 +107,15 @@ a.desc:after {
 .mt-2 .nav-item a.nav-link{
     font-size: 14px;
 }
+.sidebar-dark-primary .nav-sidebar > .nav-item > .nav-link.active,
+[class*="sidebar-dark-"] .nav-treeview > .nav-item > .nav-link.active
+{
+    background-color: #343a40 !important;
+    color:#fff !important;
+}
+[class*="sidebar-dark-"] .nav-treeview{
+    margin-left: 10px;
+}
+[class*="sidebar-dark-"] .nav-treeview i.nav-icon{
+    font-size: 12px !important;
+}
