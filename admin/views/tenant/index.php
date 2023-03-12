@@ -10,8 +10,9 @@ use kartik\grid\GridView;
 /** @var common\models\TenantSearch $searchModel */
 /** @var yii\data\ActiveDataProvider $dataProvider */
 
-$this->title = 'Tenants';
-$this->params['breadcrumbs'][] = $this->title;
+$this->title = 'Арендаторы';
+
+
 ?>
 <div class="tenant-index">
 
@@ -85,7 +86,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'toolbar' =>  [
             [
                 'content' =>
-                    Html::a('Add New', ['create'], ['class' => 'btn btn-success'])
+                    Html::a("<i class='fas fa-plus-square'></i>", ['create'], ['class' => 'btn btn-success'])
                     .Html::a('<i class="fas fa-redo"></i>', ['grid-demo'], [
                         'class' => 'btn btn-outline-secondary',
                         'title'=>Yii::t('app', 'Reset Grid'),

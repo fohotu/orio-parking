@@ -7,15 +7,27 @@ use common\models\search\TenantSearch;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use common\models\form\EmployeeForm;
+use common\models\form\TenantForm;
+use common\service\TenantService;
 
 /**
  * TenantController implements the CRUD actions for Tenant model.
  */
 class TenantController extends BaseController
 {
+    
+    private $service;
+
+    public function __construct($id, $module, $config = [],TenantService $service)
+    {
+        parent::__construct($id, $module,$config);
+        $this->service = $service;
+    }
+    
     /**
      * @inheritDoc
      */
+
     public function behaviors()
     {
         return array_merge(
@@ -69,20 +81,16 @@ class TenantController extends BaseController
      */
     public function actionCreate()
     {
-        $model = new Tenant();
+       // $model = new Tenant();
+
+        $model = new TenantForm();
 
         if ($this->request->isPost) {
-            if ($model->load($this->request->post()) && $model->save()) {
-                return $this->redirect(['view', 'id' => $model->id]);
-            }else{
-            var_dump($model->errors);exit;
-
+            if($model->load($this->request->post()) && $model->validate()){
+              $r= $this->service->create($model->attributes);
+                var_dump($r);exit;
             }
-        } else {
-           
-            $model->loadDefaultValues();
-        }
-
+        } 
         return $this->render('create', [
             'model' => $model,
         ]);
@@ -99,8 +107,9 @@ class TenantController extends BaseController
     {
         $model = $this->findModel($id);
 
+
         if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+            return $this->redirect(['index']);
         }
 
         return $this->render('update', [

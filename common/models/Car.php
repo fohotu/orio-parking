@@ -33,7 +33,7 @@ class Car extends \yii\db\ActiveRecord
         return [
             [['car_number'], 'required'],
             //[['created_at', 'updated_at', 'created_by', 'deleted_at'], 'integer'],
-            [['car_number','description'], 'string', 'max' => 255],
+            [['car_number','car_color','car_model'], 'string', 'max' => 255],
         ];
     }
 

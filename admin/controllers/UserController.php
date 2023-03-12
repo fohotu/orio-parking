@@ -2,8 +2,11 @@
 
 namespace admin\controllers;
 
+use Yii;
 use common\models\User;
 use common\models\form\UserForm;
+use common\models\form\ChangePasswordForm;
+use common\models\form\ChangeRoleForm;
 use common\models\search\UserSearch;
 use common\service\UserService;
 use yii\web\Controller;
@@ -115,12 +118,12 @@ class UserController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
-
-        if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        
+        if ($this->request->isPost && $model->profile->load($this->request->post()) && $model->profile->save()) {
+            return $this->redirect(['index']);
         }
 
-        return $this->render('update', [
+        return $this->render('update',[
             'model' => $model,
         ]);
     }
@@ -138,6 +141,50 @@ class UserController extends Controller
 
         return $this->redirect(['index']);
     }
+
+
+
+    public function actionChangePassword($u)
+    {
+        $passwordForm = new ChangePasswordForm;
+
+        if(Yii::$app->request->isPost){
+            if($passwordForm->load(Yii::$app->request->post()) &&  $passwordForm->validate()){
+                $user = $this->findModel($u);
+                $user->password_hash = Yii::$app->getSecurity()->generatePasswordHash($passwordForm->password);
+                if($user->save())
+                    return $this->redirect(['index']);
+            }
+        }
+
+        return $this->render('change_password',[
+            'passwordForm' => $passwordForm,
+        ]);
+    }
+
+    public function actionChangeRole($u)
+    {
+        $auth = Yii::$app->authManager;
+        $roleForm = new ChangeRoleForm;
+        $roles = Yii::$app->authManager->getRoles();
+        $userRole = $auth->getRolesByUser($u);
+        if(Yii::$app->request->isPost){
+            if($roleForm->load(Yii::$app->request->post()) &&  $roleForm->validate()){
+                $user = $this->findModel($u);
+                $auth->revokeAll($user->id);
+                $newRole = $auth->getRole($roleForm->role);
+                $auth->assign($newRole, $user->id);
+                return $this->redirect(['index']);
+            }
+        }
+
+        return $this->render('change_role',[
+            'roleForm' => $roleForm,
+            'roles' => $roles,
+            'userRole' => $userRole,
+        ]);
+    }
+
 
     /**
      * Finds the User model based on its primary key value.

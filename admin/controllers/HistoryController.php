@@ -4,15 +4,30 @@ namespace admin\controllers;
 
 use common\models\ParkingHistory;
 use common\models\search\ParkingHistorySearch;
+
+use common\service\HistoryService;
+
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+
+
 
 /**
  * Tenant1Controller implements the CRUD actions for ParkingHistory model.
  */
 class HistoryController extends Controller
 {
+
+
+    private $service;
+
+    public function __construct($id, $module, $config = [],HistoryService $service)
+    {
+        parent::__construct($id, $module,$config);
+        $this->service = $service;
+    }
+
     /**
      * @inheritDoc
      */
@@ -38,15 +53,17 @@ class HistoryController extends Controller
      */
     public function actionIndex()
     {
-       
-       
+
+
+        $this->service->addPerson(new \stdClass);
         $searchModel = new ParkingHistorySearch();
         $dataProvider = $searchModel->search($this->request->queryParams);
 
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
-        ]);
+        ]);   
+
     }
 
     /**

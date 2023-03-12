@@ -36,17 +36,27 @@
             echo \hail812\adminlte\widgets\Menu::widget([
                 'items' => [
                     [
+                        'label' => 'Сотрудники',
+                        'icon' => 'user',
+                        'url' => ['employee/self']
+                    ],
+                    [
                         'label' => 'Арендатор',
                         'icon' => 'car',
                       
                         'itemOptions'=>[
                             'active' => true,
                         ],
-                        'items' => [
+
+                      //  'items' => \Yii::$app->user->can('createTenant') ?
+                      'items' =>  [
                             ['label' => 'Добавить новое', 'url' => ['tenant/create'], 'icon' => 'file'],
                             ['label' => 'Список арендаторов', 'url' => ['tenant/index'], 'icon' => 'file'],
                             
-                        ],
+                        ]
+                        //:[],
+                        
+
                         
                     ],
                    

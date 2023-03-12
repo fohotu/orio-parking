@@ -10,18 +10,50 @@ use yii\helpers\Url;
 
 use kartik\grid\ActionColumn;
 use kartik\grid\GridView;
+use yii\bootstrap4\Modal;
 
 /** @var yii\web\View $this */
 /** @var common\models\search\EmployeeSearch $searchModel */
 /** @var yii\data\ActiveDataProvider $dataProvider */
 
-$this->title = 'Employees';
-$this->params['breadcrumbs'][] = $this->title;
+$this->title = 'Сотрудники';
+
 ?>
 <div class="employee-index">
 
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
-   
+<?php
+  Modal::begin([
+       'id'=>'add-employee-modal', 
+  ]);
+
+  echo $this->render('_create',[
+    'model'=>$model,
+  ]);
+
+  Modal::end();
+ ?>
+
+<?php
+
+  Modal::begin([
+       'id'=>'limit-employee-modal', 
+  ]);
+
+?>
+<form method="post" action="<?php echo Url::to(['rate'])?>">
+    <input type="hidden" name="employee" id="employee" value=""/>
+    <input type="hidden" name="<?php echo Yii::$app->request->csrfParam?>" value="<?php echo Yii::$app->request->csrfToken?>" />
+    <select class="form-control"  name="limit" id="limit_value">
+        <option value="rate" >По тарифу</option>  
+        <option value="unlim">Безлимитный</option>  
+    </select>
+    <button class="btn btn-success" type="submit">Save</button>
+</form>
+<?php 
+
+  Modal::end();
+ ?>
+
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
@@ -37,7 +69,11 @@ $this->params['breadcrumbs'][] = $this->title;
                 //'filter'=>'',
                 'value' => function($model){
                     if($model->profile){
-                        return $model->fullName;
+                        $rate = "";
+                        if($model->unlime_rate){
+                            $rate = "*";
+                        }
+                        return $rate.$model->fullName;
                     }
                 }
             ],
@@ -56,7 +92,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     return $model->created_at_string;
                 }
             ],
-            'created_by',
+            //'created_by',
             [
                 'attribute' =>'tenant_id',
                 'filter' => ArrayHelper::map(Tenant::receive()->getDropDownList(),'id','tenant_name'),
@@ -66,6 +102,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         return $model->company->tenant_name;
                 }
             ],
+
             [
                 'attribute'=>'balance',
                 'label' => 'остаток',
@@ -82,7 +119,7 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
             [
                 'class' => ActionColumn::className(),
-                'template' => '{update} {delete}',
+                'template' => '{update} {delete} {car} {unlime}',
                 'urlCreator' => function ($action, Employee $model, $key, $index, $column) {
                     return Url::toRoute([$action, 'id' => $model->id]);
                  },
@@ -99,6 +136,13 @@ $this->params['breadcrumbs'][] = $this->title;
                     'delete' => function($url,$model,$key){
                         return "<a href='".$url."'  data-method='post' data-confirm='". Yii::t('kvgrid', 'Are you sure to delete this 1{key}?',['item' => $key])."' class='btn btn-success'>Удалить</a>";
                         
+                    },
+                    'car'=>function($url,$model,$key){
+                        return Html::a('Машина',['/user-car/index','id'=>$model->id],['class'=>'btn btn-success' ],['class'=>'glyphicon glyphicon-users']);
+                     
+                    },
+                    'unlime' => function ($url,$model,$key){
+                        return "<button data-employee='$model->id' data-value='$model->unlime_rate' class='btn btn-success unlime'>*</button>";
                     }
                  ]
             ],
@@ -120,8 +164,8 @@ $this->params['breadcrumbs'][] = $this->title;
         'toolbar' =>  [
             [
                 'content' =>
-                    Html::a('Add New', ['create','tenant'=>Yii::$app->request->get('id')], ['class' => 'btn btn-success'])
-                    .Html::a('<i class="fas fa-redo"></i>', ['grid-demo'], [
+                    Html::a("<i class='fas fa-plus-square'></i>", ['create','tenant'=>Yii::$app->request->get('id')], ['class' => 'btn btn-success'])
+                      .Html::a('<i class="fas fa-redo"></i>', ['grid-demo'], [
                         'class' => 'btn btn-outline-secondary',
                         'title'=>Yii::t('app', 'Reset Grid'),
                         'data-pjax' => 0, 
@@ -138,3 +182,24 @@ $this->params['breadcrumbs'][] = $this->title;
 
 
 </div>
+
+<?php 
+$js = "
+    $('.unlime').click(function(){
+
+        let employee=$(this).attr('data-employee');
+        let value = $(this).attr('data-value');
+
+        $('#employee').val(employee);
+        if(value==1){
+            $('#limit_value').val('unlim').change();
+        }else{
+            $('#limit_value').val('rate').change();
+        }
+
+
+        $('#limit-employee-modal').modal('show');
+    });
+";
+$this->registerJs($js);
+?>

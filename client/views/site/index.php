@@ -1,52 +1,96 @@
-<?php
+<?php 
+use yii\helpers\Url;
+use yii\grid\GridView;
+use yii\widgets\Pjax;
+$this->title = "Security Page";
 
-/** @var yii\web\View $this */
-
-$this->title = 'My Yii Application';
 ?>
-<div class="site-index">
-    <div class="p-5 mb-4 bg-transparent rounded-3">
-        <div class="container-fluid py-5 text-center">
-            <h1 class="display-4">Congratulations!</h1>
-            <p class="fs-5 fw-light">You have successfully created your Yii-powered application.</p>
-            <p><a class="btn btn-lg btn-success" href="http://www.yiiframework.com">Get started with Yii</a></p>
-        </div>
-    </div>
 
-    <div class="body-content">
+<table id="sct" class="table table-bordered" style="display:none">
 
-        <div class="row">
-            <div class="col-lg-4">
-                <h2>Heading</h2>
+        <tr>
+             <td>#</td>   
+             <td>Номер</td>   
+             <td>Время</td>   
+             <td>Организация</td>
+             <td>Водител</td>   
+        </tr>
+        <?php 
+        for($i=1;$i<2;$i++){
+        ?> 
+            <tr>
+             <td>въезд</td>   
+             <td>Y<?=$i.rand(11,99)?>AA<?=rand(99,999)?></td>   
+             <td>20.02.2023 18:26:48</td>   
+             <td>--</td>
+             <td>Ивановна</td>   
+            </tr>
 
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
-                    dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-                    ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
-                    fugiat nulla pariatur.</p>
+        <?php 
+            }
+        ?>
+</table>
 
-                <p><a class="btn btn-outline-secondary" href="http://www.yiiframework.com/doc/">Yii Documentation &raquo;</a></p>
-            </div>
-            <div class="col-lg-4">
-                <h2>Heading</h2>
+<?php 
+ Pjax::begin(['id' => 'my_pjax']); 
 
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
-                    dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-                    ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
-                    fugiat nulla pariatur.</p>
+echo GridView::widget([
+    'dataProvider' => $provider,
+]);
 
-                <p><a class="btn btn-outline-secondary" href="http://www.yiiframework.com/forum/">Yii Forum &raquo;</a></p>
-            </div>
-            <div class="col-lg-4">
-                <h2>Heading</h2>
+Pjax::end();
 
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
-                    dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-                    ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
-                    fugiat nulla pariatur.</p>
+?>
 
-                <p><a class="btn btn-outline-secondary" href="http://www.yiiframework.com/extensions/">Yii Extensions &raquo;</a></p>
-            </div>
-        </div>
+<?php 
+$url = Url::to(['parking']);
+$js = "
 
-    </div>
-</div>
+fetch('$url')
+.then((response)=>{
+    const res = response.json();
+    res.then((r)=>{
+        let tb = document.querySelector('#sct tbody');
+        r.forEach((e)=>{
+            let tr = document.createElement('tr');
+            let comp = document.createElement('td');
+            let dt = document.createElement('td');
+            let empl = document.createElement('td');
+            let num = document.createElement('td');
+            let type = document.createElement('td');
+
+            let compText = document.createTextNode(e.company);
+            let dtText = document.createTextNode(e.date_time);
+            let emplText = document.createTextNode(e.employe);
+            let typeText = document.createTextNode(e.type);
+            let numText = document.createTextNode(e.number);
+
+            comp.appendChild(compText);
+            dt.appendChild(dtText);
+            empl.appendChild(emplText);
+            type.appendChild(typeText);
+            num.appendChild(numText);
+
+            tr.appendChild(type);
+            tr.appendChild(num);
+            tr.appendChild(dt);
+            tr.appendChild(comp);
+            tr.appendChild(empl);
+           
+
+            tb.appendChild(tr);
+
+
+        });
+    });
+})
+";
+
+$reload ="
+    setInterval(()=>{
+        $.pjax.reload('#my_pjax');
+    },5000);
+";
+$this->registerJS($reload);
+
+?>

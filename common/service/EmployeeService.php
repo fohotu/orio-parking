@@ -13,7 +13,52 @@ class EmployeeService extends BaseService implements ServiceInterface{
         echo 'Add Employee';
     }
 
-    public function create($data)
+    public function createOnOrion()
+    {
+        return 1;
+    }
+
+    public function create($data,$orionId)
+    {
+        $db = Yii::$app->db;
+        $transaction = $db->beginTransaction();
+        try {
+            $time = time();
+            $db->createCommand()->insert('employee',[
+               'created_at' => $time,
+               'updated_at' => $time,
+               'created_at_string' => Date('d-m-Y',$time),
+               'created_by' => 1,
+               'tenant_id' => $data['tenant_id'],
+               'unlime_rate' => 0, 
+               'orion_id' => $orionId,      
+            ])->execute();
+            
+            $employeeId = $db->getLastInsertID();
+            $db->createCommand()->insert('profile',[
+                'user_id' => $employeeId,
+                'last_name' => $data['lastname'],
+                'patronymic' => $data['patronymic'],
+                'phone_number' => $data['phone_number'],
+                'user_type' => 'employee',
+                'name' => $data['name'],
+             ])->execute();
+            
+            $transaction->commit();
+
+            return $employeeId;
+
+        } catch(\Exception $e) {
+            $transaction->rollBack();
+            throw $e;
+        } catch(\Throwable $e) {
+            $transaction->rollBack();
+            throw $e;
+        }
+
+    }
+
+    public function create1($data)
     {
         $db = Yii::$app->db;
         $transaction = $db->beginTransaction();
@@ -77,25 +122,18 @@ class EmployeeService extends BaseService implements ServiceInterface{
     }
 
 
+  
+
+
     public function update($model,$data)
     {
         $model->profile->load($data);
-        $model->car[0]->setAttributes($data);
-
-
-        $model->userParking->setAttributes($data);
-       // var_dump($data);
-        $model->userParking->start_date =$this->mkTimeFromStr($data['UserParking']['start_date']);
-        $model->userParking->end_date =$this->mkTimeFromStr($data['UserParking']['end_date']);
-       // var_dump($model->userParking->attributes);exit;
         $db = Yii::$app->db;
         $transaction = $db->beginTransaction();
 
         try {
             if($model->save()){
                 $model->profile->save();
-                $model->userParking->save();
-                $model->car[0]->save();
             }
             // ...другие операции с базой данных...
             $transaction->commit();

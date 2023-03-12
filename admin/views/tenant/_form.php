@@ -20,22 +20,37 @@ use yii\bootstrap5\Tabs;
             'items' => [
                          [
                              'label' => 'Организация',
-                             'content' => 
-                                $form->field($model, 'tenant_name')->textInput(['maxlength' => true])
+                             'content' => '
+                             <div class="card">
+                               <div class="card-body">'
+                                .$form->field($model, 'tenant_name')->textInput(['maxlength' => true])
                                 .$form->field($model, 'tin')->textInput(['maxlength' => true])
                                 .$form->field($model, 'bic')->textInput(['maxlength' => true])
                                 .$form->field($model, 'address')->textarea(['rows' => 6])
                                 .$form->field($model, 'cost_per_hour')->textInput() 
                                 .$form->field($model, 'allocated_spaces_count')->textInput()
-                             ,
+                            .'</div>
+                            </div>
+                            ',
                              'active' => true
                          ],
                          [
                             'label' => 'Реквизиты банка',
-                            'content' =>
-                                $form->field($model, 'bank_name')->textInput()
+                            'content' => '
+                            <div class="card">
+                              <div class="card-body">'
+                                .$form->field($model, 'bank_name')->textInput()
                                 .$form->field($model, 'checking_account')->textInput(['maxlength' => true])    
+                              .'
+                              </div>
+                              </div>
+                              '  
                             ,
+                        ],
+
+                        [
+                            'label' => 'Тариф',
+                            'content' =>$this->render('_rate',['model'=>$model,'form'=>$form]),
                         ],
                 ]
          ]);

@@ -14,10 +14,6 @@ class EmployeeForm extends Model
     public $lastname;
     public $patronymic;
     public $phone_number;
-    public $car_number;
-    public $car_description;
-    public $pass_from;
-    public $pass_to;
     public $tenant_id;
  
 
@@ -28,10 +24,8 @@ class EmployeeForm extends Model
     public function rules()
     {
         return [
-            // username and password are both required
-            [['name', 'lastname','patronymic','car_number','pass_from','pass_to','tenant_id'], 'required'],
+            [['name', 'lastname','patronymic','tenant_id'], 'required'],
             [['phone_number'],'string','max'=>16,'min'=>6],
-            [['car_description'],'string','max'=>200],
         ];
     }
 
@@ -47,7 +41,9 @@ class EmployeeForm extends Model
             'pass_from' => 'Пропуск с',
             'pass_to' => 'Пропуск по',
             'phone_number' => 'Контактный телефон',
-            'car_description' => 'Описание автомобиля',
+            'car_model' => 'Модель автомобиля',
+            'car_vin' => 'VIN',
+            'car_color' => 'Цвет автомобиля',
         ];
     }
 

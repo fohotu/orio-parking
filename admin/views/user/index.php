@@ -60,25 +60,42 @@ $this->params['breadcrumbs'][] = $this->title;
                 'value' =>function($model){
                     return $model->status;
                 }, 
-            ], 
+            ],
+            [
+                'attribute' => 'role',
+                'value' => function($model) {
+                   $roles =  Yii::$app->authManager->getRolesByUser($model->id);
+                    foreach($roles as $role){
+                        return $role->description ? : $role->name;
+                    }   
+                },
+            ],
+            
             //'created_at',
             //'updated_at',
             //'verification_token',
             //'tenant_id',
+
             [
                 'class' => ActionColumn::className(),
                 'urlCreator' => function ($action, User $model, $key, $index, $column) {
                     return Url::toRoute([$action, 'id' => $model->id]);
-                 },
-                 'template' => '{update} {delete}',
-                 'buttons'=>[
-                    'update'=>function($url,$model,$key){
+                },
+                 'template' => '{password} {role} {update} {delete} ',
+                 'buttons' => [
+                    'password' => function($url,$model,$key){
+                        return "<a href='".Url::to(['change-password','u'=>$model->id])."' class='btn btn-success'>Password</a>";
+                    },
+                    'role' => function($url,$model,$key){
+                        return "<a href='".Url::to(['change-role','u'=>$model->id])."' class = 'btn btn-success'>Role</a>";
+                    },
+                    'update' => function($url,$model,$key){
                         return "<a href='".$url."' class='btn btn-success'>Обновить</a>";
                     },  
                     'delete' => function($url,$model,$key){
                         return "<a href='".$url."'  data-method='post' data-confirm='". Yii::t('kvgrid', 'Are you sure to delete this 1{key}?',['item' => $key])."' class='btn btn-success'>Удалить</a>";
                     }
-                 ]
+                ]
             ],
         ],
         'toolbar' =>  [

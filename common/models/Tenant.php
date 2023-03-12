@@ -45,10 +45,11 @@ class Tenant extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['tenant_name'], 'required'],
-            [['address', 'bank_name', 'cost_per_hour'], 'string'],
+            [['tenant_name','allocated_spaces_count'], 'required'],
+            [['address', 'bank_name', 'cost_per_hour','cost_per_day'], 'string'],
             [['allocated_spaces_count'], 'integer'],
             [['tenant_name', 'tin', 'bic', 'checking_account'], 'string', 'max' => 255],
+            [['day_rate', 'hour_rate'], 'boolean'],
         ];
     }
 
@@ -66,11 +67,14 @@ class Tenant extends \yii\db\ActiveRecord
             'address' => 'Адрес',
             'bank_name' => 'Наименование банка',
             'cost_per_hour' => 'Стоимость за час аренды',
+            'cost_per_day' => 'Стоимость за день',
             'allocated_spaces_count' => 'Количество выделяемых машиномест',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
             'created_by' => 'Created By',
             'deleted_at' => 'Deleted At',
+            'day_rate' => 'Тариф по дням ',
+            'hour_rate' => 'Почасовой Тариф',
         ];
     }
 

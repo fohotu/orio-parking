@@ -11,7 +11,7 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="tenant-create">
 
-    <?= $this->render('_form', [
+    <?= $this->render('_create_form', [
         'model' => $model,
     ]) ?>
 

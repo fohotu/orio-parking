@@ -20,7 +20,9 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'phone_number')->textInput() ?>
     <?= $form->field($model, 'car_number')->textInput() ?>
-    <?= $form->field($model, 'car_description')->textInput() ?>
+    <?= $form->field($model, 'car_model')->textInput() ?>
+    <?= $form->field($model, 'car_color')->textInput() ?>
+    <?= $form->field($model, 'car_vin')->textInput() ?>
     <?= $form->field($model, 'pass_from')->textInput() ?>
     <?= $form->field($model, 'pass_to')->textInput() ?>
 

@@ -14,6 +14,8 @@ use yii\web\Response;
  */
 class SiteController extends BaseController
 {
+
+    public $enableCsrfValidation = false;
     /**
      * {@inheritdoc}
      */
@@ -24,11 +26,11 @@ class SiteController extends BaseController
                 'class' => AccessControl::class,
                 'rules' => [
                     [
-                        'actions' => ['login', 'error','user-role','user','permision'],
+                        'actions' => ['login', 'error','user-role','user','permision','sd','gd','change-user'],
                         'allow' => true,
                     ],
                     [
-                        'actions' => ['logout', 'index','t'],
+                        'actions' => ['logout', 'index'],
                         'allow' => true,
                         //'roles' => ['@'],
                     ],
@@ -75,21 +77,224 @@ class SiteController extends BaseController
      *
      * @return string
      */
+
+
+    public function actionSd(){
+        $k = md5('123456');
+        $k = mt_rand(99,999);
+        //$data = serialize([1,2,3,4,5,'test']);
+        $r = Yii::$app->redis;
+        //$r->set('parking:'.$k,$data);
+       // $r->del('parking');
+       // $r->del('parkingList');
+        $r->rpush('parkingList',$k);
+    }
+
+    public function actionGd(){
+        $k = md5('123456');
+        $r = Yii::$app->redis;
+        if($r->exists($k)){
+            var_dump($r->get($k));
+        }
+
+
+
+        /*
+        
+        $companys = $client->GetCompanies(true,false);
+        $result = $companys->OpertionResult;
+        if(!empty($result) && is_array($result)){
+            $lastId = $result[count($result)-1]->Id;
+        }else{
+            $lastId = 0
+        }
+
+        $obj = new stdClass;
+        $obj->Id = $lastId;
+        $obj->Name = "Test Air";
+        $obj->Address = "Moscow"; 
+        $obj->Phone = "12345";
+         
+        $r = $client->CreateCompany($obj);
+        
+        
+
+        */
+
+
+        //
+   //     AddCar(car, token)
+     //   TOperationResult<TCar> 
+        
+        /*
+        
+        $obj = new stdClass;
+        $obj->Id = $lastId;
+        $obj->Model = "";
+        $obj->Color = "";
+        $obj->Number = "";
+        $obj->Vin = "";
+
+        */
+        
+        //
+      //  AddPersonCar()
+      //  TOperationResult<TCar> AddPersonCar(car, person, token)
+
+
+      /*
+        
+       $obj = new stdClass;
+        $obj->Id = $lastId->Id;
+        $obj->LastName = "Тимуров";
+        $obj->FirstName = "Тимур";
+        $obj->MiddleName = "Тимурович";
+        $obj->BirthDate="2000-12-30T00:00:00.000+03:00";
+        $obj->Company = 0;
+        $obj->Department = 0;
+        $obj->Position = 0;
+        $obj->CompanyId = 0;
+        $obj->DepartmentId = 0;
+        $obj->PositionId = 0;
+        $obj->TabNum = 1;
+        $obj->Phone = 0;
+        $obj->HomePhone = 0;
+        $obj->Address = 0;
+        $obj->Photo = null;
+        $obj->AccessLevelId = 1;
+        $obj->Status = 1;
+        $obj->ContactIdIndex = 0;
+        $obj->IsLockedDayCrossing = false;
+        $obj->IsFreeShedule = false;
+        $obj->ExternalId = 0;
+        $obj->IsInArchive = false;
+        $obj->DocumentType = 0;
+        $obj->DocumentSerials = 0;
+        $obj->DocumentNumber = 0;
+        $obj->DocumentIssueDate = "2024-12-30T00:00:00.000+03:00";
+        $obj->DocumentEndingDate = "2024-12-30T00:00:00.000+03:00";
+        $obj->DocumentIsser = 0;
+        $obj->DocumentIsserCode = 0;
+        $obj->Sex = 0;
+        $obj->Birthplace = "";
+        $obj->EmailList = "";
+        $obj->ArchivingTimeStamp = "2024-12-30T00:00:00.000+03:00";
+        $obj->IsInBlackList = false;
+        $obj->IsDismissed = false;
+        $obj->ChangeTime = "";
+        $obj->Itn = "";
+        $obj->DismissedComment = "";
+        $obj->BlackListComment = "";
+
+      */  
+
+      /*
+
+      $obj = new stdClass;
+      $obj->Id = "int";
+      $obj->Model = "string";
+      $obj->Color = "string";
+      $obj->Number = "string";
+      $obj->Vin = "string";
+
+      */
+
+    /*
+        
+        $time = time();
+$start = $time - 365*24*3600;
+$end = $time + 2*365*24*3600;
+$num = "У790ЕВ791";
+ $person = $client->GetPersonById(110);
+//$client->PutPassWithEntryPoints($person);
+//var_dump($person);
+//exit;
+$ac = $client->PutPassWithAccLevels($num,$person->OperationResult,[$al->OperationResult],$start,$end,"",5);
+        
+    */
+
+
+
+        $persons = $client->GetPersons();
+     
+        
+        $personList = $persons->OperationResult;
+        $lastId = $personList[count($personList)-1];
+        
+        $obj = new stdClass;
+        $obj->Id = $lastId->Id;
+        $obj->LastName = "Тимуров";
+        $obj->FirstName = "Тимур";
+        $obj->MiddleName = "Тимурович";
+        $obj->BirthDate="2000-12-30T00:00:00.000+03:00";
+        $obj->Company = 0;
+        $obj->Department = 0;
+        $obj->Position = 0;
+        $obj->CompanyId = 0;
+        $obj->DepartmentId = 0;
+        $obj->PositionId = 0;
+        $obj->TabNum = 1;
+        $obj->Phone = 0;
+        $obj->HomePhone = 0;
+        $obj->Address = 0;
+        $obj->Photo = null;
+        $obj->AccessLevelId = 1;
+        $obj->Status = 1;
+        $obj->ContactIdIndex = 0;
+        $obj->IsLockedDayCrossing = false;
+        $obj->IsFreeShedule = false;
+        $obj->ExternalId = 0;
+        $obj->IsInArchive = false;
+        $obj->DocumentType = 0;
+        $obj->DocumentSerials = 0;
+        $obj->DocumentNumber = 0;
+        $obj->DocumentIssueDate = "2024-12-30T00:00:00.000+03:00";
+        $obj->DocumentEndingDate = "2024-12-30T00:00:00.000+03:00";
+        $obj->DocumentIsser = 0;
+        $obj->DocumentIsserCode = 0;
+        $obj->Sex = 0;
+        $obj->Birthplace = "";
+        $obj->EmailList = "";
+        $obj->ArchivingTimeStamp = "2024-12-30T00:00:00.000+03:00";
+        $obj->IsInBlackList = false;
+        $obj->IsDismissed = false;
+        $obj->ChangeTime = "";
+        $obj->Itn = "";
+        $obj->DismissedComment = "";
+        $obj->BlackListComment = "";
+      
+        $client->AddPerson($obj);
+
+
+    }
+
     public function actionIndex()
     {
         $r = Yii::$app->redis;
-        $res = $r->set('1','aa777aa');
+
+        $data = [
+            "44"=>"dfd",
+            "441"=>"dfd1",
+            "442"=>"dfd3",
+            "443"=>"dfd4",
+        ];
+
+        $key = time(); 
+
+        $sr = serialize($data);
+        $res = $r->set($key,$sr);
+        
         var_dump($res);
         //return $this->render('index');
     }
     public function actionT()
     {
         $r = Yii::$app->redis;
-        $res = $r->get('1');
-        var_dump($res);
+        $res = $r->get('d');
+        $us = unserialize($res);
+        var_dump($us);
         //return $this->render('index');
     }
-
 
     public function actionAdmin()
     {
@@ -107,7 +312,20 @@ class SiteController extends BaseController
     }
     public function actionMod()
     {
+
         echo 'Moderator';
+        
+        //[C877XE77] Выезд
+
+        $command  = new stdClass();
+        $command->ItemType = "RECOGNITION_CHANNEL";
+        $command->ItemId = 0;
+        $command->TimeStamp = "2023-02-24T12:05:55.000+03:00";
+        $items [] = $command; 
+        $rc = $client->ControlItems($items, 0);
+        var_dump($rc);
+
+
     }
 
 
@@ -452,6 +670,34 @@ class SiteController extends BaseController
      *
      * @return string|Response
      */
+
+    public function actionChangeUser()
+    {
+      
+        $model = new LoginForm();
+        $role = Yii::$app->request->post('role');
+
+        if($role == 'a'){
+            $data['username'] = 'admin';       
+            $data['password'] = '123456';      
+        }else if($role == 'm'){
+
+            $data['username'] = 'moderator';       
+            $data['password'] = '123456';
+
+        }else{
+
+            $data['username'] = 'tenant';       
+            $data['password'] = '123456';
+        }
+        
+        $model = \common\models\User::findByUsername($data['username']);
+        if (Yii::$app->user->login($model)) {
+           return $this->redirect(['history']);
+        } 
+
+    }
+
     public function actionLogin()
     {
         if (!Yii::$app->user->isGuest) {
