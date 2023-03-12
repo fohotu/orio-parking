@@ -11,7 +11,7 @@ return [
     'basePath' => dirname(__DIR__),
     'controllerNamespace' => 'admin\controllers',
     'bootstrap' => ['log'],
-    'defaultRoute' => 'history',
+    'defaultRoute' => 'home',
     'components' => [
         'request' => [
             'csrfParam' => '_csrf-backend',
@@ -20,6 +20,7 @@ return [
             'identityClass' => 'common\models\User',
             'enableAutoLogin' => true,
             'identityCookie' => ['name' => '_identity-backend', 'httpOnly' => true],
+            'loginUrl'=>['auth'],
         ],
         'session' => [
             // this is the name of the session cookie used for login on the backend

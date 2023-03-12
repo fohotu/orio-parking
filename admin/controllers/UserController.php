@@ -12,6 +12,7 @@ use common\service\UserService;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\filters\AccessControl;
 
 /**
  * UserController implements the CRUD actions for User model.
@@ -34,7 +35,19 @@ class UserController extends Controller
     {
         return array_merge(
             parent::behaviors(),
+
             [
+                
+                'access' => [
+                    'class' => AccessControl::class,
+                    'rules' => [
+                        [
+                            'allow' => true,
+                            'roles' => ['admin'],
+                        ],
+                    ],
+                ],
+                
                 'verbs' => [
                     'class' => VerbFilter::className(),
                     'actions' => [
@@ -52,16 +65,6 @@ class UserController extends Controller
      */
     public function actionIndex()
     {
-/*
-        $profile = new \common\models\Profile;
-        $profile->user_id = 3;
-        $profile->last_name = 'Долохова';    
-        $profile->patronymic = 'Ивановна';
-        $profile->phone_number = '223456789';
-        $profile->user_type = 'user';
-        $profile->name = 'Марья';
-        $profile->save();
-        */
 
         $searchModel = new UserSearch();
         $dataProvider = $searchModel->search($this->request->queryParams);

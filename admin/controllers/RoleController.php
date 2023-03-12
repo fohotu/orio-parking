@@ -8,12 +8,39 @@ use common\models\search\TenantSearch;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use common\models\form\EmployeeForm;
+use yii\filters\AccessControl;
 
 /**
  * RoleController implements the CRUD actions for  model.
  */
 class RoleController extends BaseController
 {
+
+    public function behaviors()
+    {
+        return array_merge(
+            parent::behaviors(),
+            [
+                
+                'access' => [
+                    'class' => AccessControl::class,
+                    'rules' => [
+                        [
+                            'allow' => true,
+                           // 'actions'=>['index'],
+                            'roles' =>['admin'],// ['BrowseSettings','UpdateSettings'],
+                        ],
+                    ],
+                ],
+                'verbs' => [
+                    'class' => VerbFilter::className(),
+                    'actions' => [
+                        'delete' => ['POST'],
+                    ],
+                ],
+            ]
+        );
+    }
 
     public function actionTest()
     {

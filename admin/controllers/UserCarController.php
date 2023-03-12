@@ -88,8 +88,12 @@ class UserCarController extends BaseController
 
         if ($this->request->isPost) {
             if ($model->load($this->request->post()) && $model->validate()) {
-                $save = $this->service->create($model->attributes);
-                return $this->redirect(['index', 'id' => $id]);
+                if($this->service->createOnOrion($model->attributes)){
+                    $save = $this->service->create($model->attributes);
+                    return $this->redirect(['index', 'id' => $id]);
+                }
+
+
             }
         }
 

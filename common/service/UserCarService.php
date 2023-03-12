@@ -9,9 +9,38 @@ use common\models\Car;
 class UserCarService extends BaseService implements ServiceInterface{
 
 
-    public function createOnOrion()
+    public function createOnOrion($data)
     {
+        
+        $cars = $this->soap()->GetCars();
+        $carList = $cars->OperationResult;
+        $lastId = $carList[count($carList)-1];
+        $newCar = new stdClass;
+        $newCar->Id = $lastId->Id+1;
+        $newCar->Model = $data['car_model'];
+        $newCar->Color = $data['car_color'];
+        $newCar->Number = $data['car_number'];
+        $newCar->UserIndex = $data['user_index'];
+        $newCar->Vin  = $data['car_vin'];        
+        
+        $add = $this->soap()->AddCar($newCar); 
+        $person = $this->soap()->GetPersonById($data['user_index']);
+
+        $pc = $this->soap()->AddPersonCar($newCar, $person->OperationResult);
+        
+        //Person Access;
+         
+        $time = time();
+        $start = $this->mkTimeFromStr($data['start_date']);
+        $end =  $this->mkTimeFromStr($data['end_date']);
+        $num = $data['car_number'];
+       
+        $ac = $this->soap()->PutPassWithAccLevels($num,$person->OperationResult,[$al->OperationResult],$start,$end,"",5);
+       
+
+
         return true;
+        
     }
 
     public function create($data)

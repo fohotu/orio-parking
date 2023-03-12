@@ -13,9 +13,27 @@ class EmployeeService extends BaseService implements ServiceInterface{
         echo 'Add Employee';
     }
 
-    public function createOnOrion()
+    public function createOnOrion($data)
     {
-        return 1;
+        
+                
+        $person = $this->soap()->GetPersonById(24);
+        $newPerson = clone $person->OperationResult;
+        
+        $personList = $persons->OperationResult;
+        $lastId = $personList[count($personList)-1];
+        
+        $newPerson->Id = $lastId->Id;//  ,  
+        $newPerson->LastName = $data['lastname'];
+        $newPerson->FirstName = $data['name'];
+        $newPerson->MiddleName = $data['patronymic'];
+        $newPerson->TabNum = "";
+        $newPerson->AccessLevelId = 0;
+    
+        $newPersonAdded = $this->soap()->AddPerson($newPerson);
+		
+        return true;
+
     }
 
     public function create($data,$orionId)
